@@ -28,3 +28,31 @@
 
  .table-hover tbody tr:hover {
      background-color: #e8f0ff !important;}
+
+     /* Handle multiple stacked modals */
+.modal {
+    overflow-y: auto !important;
+}
+
+.modal-open {
+    overflow: auto !important;
+    padding-right: 0 !important;
+}
+
+body.modal-open {
+    overflow: auto !important;
+}
+
+/* Ensure proper backdrop stacking */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Allow scrolling in nested modals */
+.modal-dialog {
+    margin: 1.75rem auto;
+}
+
+.modal.show {
+    display: block !important;
+}
