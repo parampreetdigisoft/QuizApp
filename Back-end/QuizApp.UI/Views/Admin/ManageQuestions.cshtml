@@ -1,0 +1,173 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Manage Questions";
+}
+
+<h3 class="fw-bold mb-3">Manage Questions</h3>
+<button id="btnAddQuestion" class="btn btn-primary mb-3">
+    <i class="bi bi-plus-circle"></i> Add Question
+</button>
+
+<table class="table table-bordered table-hover" id="questionsTable">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Quiz</th>
+            <th>Question Text</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="questionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add / Edit Question</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="questionId" />
+
+                <div class="mb-3">
+                    <label>Quiz</label>
+                    <select id="quizId" class="form-select"></select>
+                </div>
+
+                <div class="mb-3">
+                    <label>Question Text</label>
+                    <textarea id="questionText" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button id="saveQuestionBtn" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const quizApi = "https://localhost:44302/api/quiz";
+    const questionApi = "https://localhost:44302/api/question";
+
+    $(document).ready(function () {
+        loadQuestions();
+        loadQuizDropdown();
+
+        // ✅ Load Questions
+        function loadQuestions() {
+            $.get(questionApi + "/all", function (data) {
+                let rows = "";
+                $.each(data, function (i, q) {
+                    rows += `
+                        <tr>
+                            <td>${q.questionId}</td>
+                            <td>${q.quizTitle || "N/A"}</td>
+                            <td>${q.questionText}</td>
+                            <td>
+                                <button class='btn btn-sm btn-warning editQuestion' data-id='${q.questionId}'>Edit</button>
+                                <button class='btn btn-sm btn-danger deleteQuestion' data-id='${q.questionId}'>Delete</button>
+                            </td>
+                        </tr>`;
+                });
+                $("#questionsTable tbody").html(rows);
+            }).fail(xhr => console.error("Error loading questions:", xhr.responseText));
+        }
+
+        // ✅ Load Quizzes for Dropdown
+        function loadQuizDropdown() {
+            $.get(quizApi + "/all", function (data) {
+                let options = `<option value="">-- Select Quiz --</option>`;
+                $.each(data, function (i, quiz) {
+                    options += `<option value="${quiz.quizId}">${quiz.title}</option>`;
+                });
+                $("#quizId").html(options);
+            });
+        }
+
+        // ✅ Add Question
+        $("#btnAddQuestion").click(function () {
+            $("#questionId").val("");
+            $("#quizId").val("");
+            $("#questionText").val("");
+            $("#questionModal").modal("show");
+        });
+
+        // ✅ Save (Add / Update)
+        $("#saveQuestionBtn").click(function () {
+            const question = {
+                questionId: $("#questionId").val(),
+                quizId: $("#quizId").val(),
+                questionText: $("#questionText").val(),
+            };
+
+            if (!question.quizId || !question.questionText.trim()) {
+                alert("Please select a quiz and enter question text.");
+                return;
+            }
+
+            if (question.questionId) {
+                // Update
+                $.ajax({
+                    url: questionApi + "/" + question.questionId,
+                    type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify(question),
+                    success: function () {
+                        $("#questionModal").modal("hide");
+                        loadQuestions();
+                    },
+                    error: function (xhr) {
+                        alert("Error updating question: " + xhr.responseText);
+                    }
+                });
+            } else {
+                // Create
+                $.ajax({
+                    url: questionApi,
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(question),
+                    success: function () {
+                        $("#questionModal").modal("hide");
+                        loadQuestions();
+                    },
+                    error: function (xhr) {
+                        alert("Error creating question: " + xhr.responseText);
+                    }
+                });
+            }
+        });
+
+        // ✅ Edit Question
+        $(document).on("click", ".editQuestion", function () {
+            const id = $(this).data("id");
+            $.get(questionApi + "/" + id, function (q) {
+                $("#questionId").val(q.questionId);
+                $("#quizId").val(q.quizId);
+                $("#questionText").val(q.questionText);
+                $("#questionModal").modal("show");
+            });
+        });
+
+        // ✅ Delete Question
+        $(document).on("click", ".deleteQuestion", function () {
+            if (!confirm("Are you sure you want to delete this question?")) return;
+
+            const id = $(this).data("id");
+            $.ajax({
+                url: questionApi + "/" + id,
+                type: "DELETE",
+                success: function () {
+                    loadQuestions();
+                },
+                error: function (xhr) {
+                    alert("Error deleting question: " + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

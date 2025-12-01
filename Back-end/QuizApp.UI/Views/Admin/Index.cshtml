@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="text-center mt-5">
+    <h2 class="fw-bold mb-4">Welcome to Quiz Admin Dashboard</h2>
+    <p class="lead text-muted">Manage users, quizzes, questions, and answers easily.</p>
+    <hr />
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <a asp-action="ManageUsers" class="card shadow-sm text-center p-4 text-decoration-none">
+                <i class="bi bi-people-fill fs-1 text-primary"></i>
+                <h5 class="mt-2">Manage Users</h5>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a asp-action="ManageQuizzes" class="card shadow-sm text-center p-4 text-decoration-none">
+                <i class="bi bi-journal-text fs-1 text-success"></i>
+                <h5 class="mt-2">Manage Quizzes</h5>
+            </a>
+        </div>
+      
+    </div>
+</div>

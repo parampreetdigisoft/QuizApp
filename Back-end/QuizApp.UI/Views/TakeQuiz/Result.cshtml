@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Quiz Result";
+}
+
+<div class="container mt-5 text-center">
+    <h2 class="fw-bold text-success">🎉 Quiz Completed!</h2>
+    <h4 class="mt-3">Your Score: <span class="text-primary">@ViewBag.Score</span> / @ViewBag.Total</h4>
+
+    <a href="/UserDashboard/Index" class="btn btn-outline-primary mt-4">Try Another Quiz</a>
+</div>

@@ -1,0 +1,76 @@
+﻿@model List<QuizApp.UI.Models.QuestionDto>
+
+@{
+    var quiz = ViewBag.Quiz as QuizApp.UI.Models.QuizDto;
+    var time = ViewBag.Time;
+}
+
+<div class="container mt-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold">Time Remaining: <span id="timer" class="text-danger fw-semibold"></span></h4>
+    </div>
+<hr />
+    <h2 class="fw-bold">@quiz.Title</h2>
+    <p class="text-muted">@quiz.Description</p>
+
+    <form id="quizForm" method="post" asp-action="SubmitQuiz">
+        @foreach (var question in Model)
+        {
+            <div class="card mb-3 p-3 shadow-sm">
+                <h5 class="fw-semibold">@question.QuestionText</h5>
+
+                @if (question.AnswerOptions != null && question.AnswerOptions.Any())
+                {
+                    foreach (var option in question.AnswerOptions)
+                    {
+                        <div class="form-check mb-1">
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name=@($"q_{question.Id}")
+                                   value="@option.Id"
+                                   id=@($"q_{question.Id}_{option.Id}") />
+
+                            <label class="form-check-label" for=@($"q_{question.Id}_{option.Id}")>
+                                @option.Text
+                            </label>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-danger">No options found for this question.</p>
+                }
+            </div>
+        }
+        <input type="hidden" value="@ViewBag.QuizId" name="quizid" />
+        <button type="submit" class="btn btn-primary">Submit Quiz</button>
+    </form>
+</div>
+@section Scripts {
+    <script>
+        // Set timer in minutes (later we’ll get this from DB)
+        const totalMinutes = @time; // test with 1 minute for now
+        let timeLeft = totalMinutes * 60; // convert to seconds
+
+        const timerElement = document.getElementById("timer");
+        const form = document.getElementById("quizForm");
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("⏰ Time is up! Submitting your quiz...");
+                form.submit();
+            }
+
+            timeLeft--;
+        }
+
+        const timerInterval = setInterval(updateTimer, 1000);
+        updateTimer(); // initial display
+    </script>
+}
