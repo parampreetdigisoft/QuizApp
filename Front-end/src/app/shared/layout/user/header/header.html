@@ -21,7 +21,7 @@
             <div class="d-flex align-items-center">
                 <span class="text-light me-2">👋 Welcome, <strong>
                         {{_authService.getLoggedInUserName()}}</strong></span>
-                <a class="btn btn-logout">Logout</a>
+                <a class="btn btn-logout" (click)="logOut()" >Logout</a>
             </div>
         </div>
     </div>
