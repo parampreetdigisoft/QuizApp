@@ -65,6 +65,11 @@ export class Auth {
     return this._cookieService.check(this._cookieName);
   }
 
+  logOutUser() {
+    this._cookieService.delete(this._cookieName, '/');
+    this._cookieService.delete(this._roleCookieName, '/');
+    this._cookieService.delete(this._cookieUserId, '/');
+  }
   getLoggedInUserName(): string {
     return this._cookieService.get(this._cookieName);
   }

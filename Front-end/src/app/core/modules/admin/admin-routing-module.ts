@@ -18,11 +18,6 @@ const routes: Routes = [
     title: 'Quiz dashboard'
   },
   {
-    path: 'dashboard',
-    component: Dashboard,
-    title: 'Admin dashboard'
-  },
-  {
     path: 'manage-questions',
     component: ManageQuestions,
     title: 'Manage questions'

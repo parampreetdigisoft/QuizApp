@@ -9,7 +9,7 @@ import { User } from './shared/layout/user/user';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'admin/dashboard',
+        redirectTo: 'admin',
         pathMatch: 'full'
     },
     {

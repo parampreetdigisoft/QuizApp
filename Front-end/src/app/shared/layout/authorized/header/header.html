@@ -6,7 +6,7 @@
                 <li><a class="nav-link text-white" routerLink="/admin/manage-users" >Users</a></li>
                 <li><a class="nav-link text-white" routerLink="/admin/manage-quiz">Quizzes</a></li>
             </ul>
-            <a class="btn btn-outline-light btn-sm" asp-controller="Account" asp-action="Logout">Logout</a>
+            <a class="btn btn-outline-light btn-sm" (click)="logOut()">Logout</a>
         </div>
     </div>
 </nav>
