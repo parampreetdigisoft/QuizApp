@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.API", "QuizApp.API\QuizApp.API.csproj", "{D9F089D5-7B18-4D96-B998-8792BE4A752A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.UI", "QuizApp.UI\QuizApp.UI.csproj", "{82BA63A4-CFB5-420D-B725-71DC7780ECC3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.Tests", "QuizApp.Tests\QuizApp.Tests.csproj", "{3D70BD3D-0288-4A8D-A4CD-C3E60BEC2390}"
 EndProject
 Global
